@@ -5,7 +5,7 @@ import typescript from "rollup-plugin-typescript2";
 export default defineConfig({
     test: {
         environment: 'happy-dom', // or 'jsdom', 'node',
-        dir: 'test',b
+        dir: 'test',
     }, root: 'vite-dev', build: {
         outDir: '../dist', emptyOutDir: true, target: 'modules', //modules: support dynamic imports defined in ES2020
         lib: {
