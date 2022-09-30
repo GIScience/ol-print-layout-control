@@ -1,0 +1,25 @@
+{
+  "name": "ol-print-layout-control",
+  "version": "0.1.0",
+  "description": "An extension of openlayers Control. It Helps the user to define a map area that fits to the desired output page format and orientation.",
+  "main": "PrintLayout.js",
+  "scripts": {
+    "test": "vitest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GIScience/ol-print-layout-control.git"
+  },
+  "keywords": [
+    "ol",
+    "openlayers",
+    "control",
+    "print-layout"
+  ],
+  "author": "M. Auer (http://heigit.org)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/GIScience/ol-print-layout-control/issues"
+  },
+  "homepage": "https://github.com/GIScience/ol-print-layout-control#readme"
+}
