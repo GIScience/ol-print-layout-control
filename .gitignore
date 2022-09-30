@@ -10,3 +10,6 @@
 
 # js packages
 **/node_modules/
+
+# build results
+/dist/
