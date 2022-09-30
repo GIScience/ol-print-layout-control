@@ -1,10 +1,22 @@
 {
   "name": "ol-print-layout-control",
   "version": "0.1.0",
-  "description": "An extension of openlayers Control. It Helps the user to define a map area that fits to the desired output page format and orientation.",
-  "main": "PrintLayout.js",
+  "description": "An extension of an Openlayers Control. It Helps the user to define a map area that fits to the desired output page format and orientation.",
+
+  "files": ["dist"],
+  "main": "ol-print-layout-control.js",
+  "types": "./dist/ol-print-layout-control.d.ts",
+  "exports": {
+    ".": {
+      "default": "./dist/ol-print-layout-control.js"
+    }
+  },
   "scripts": {
-    "test": "vitest"
+    "test": "vitest",
+    "coverage": "vitest run --coverage",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "repository": {
     "type": "git",
