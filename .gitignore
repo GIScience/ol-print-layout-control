@@ -1,0 +1,11 @@
+# some of the JetBrains project files
+/.idea/**/workspace.xml
+
+.idea/modules.xml
+.idea/*.iml
+
+# sonarlint plugin
+.idea/sonarlint/
+
+# js packages
+/node_modules/
