@@ -95,7 +95,7 @@ export class PrintLayout extends Control {
             }
             this.changed();
         } else {
-            throw new Error(`orientaion must be one of: ${Object.values(ORIENTATION)}`)
+            throw new Error(`orientation must be one of: ${Object.values(ORIENTATION)}`)
         }
     }
 
@@ -121,15 +121,15 @@ export class PrintLayout extends Control {
         return this.get(PrintLayoutProperty.MARGINS);
     }
 
-    set margins(margins ) {
-        if(!margins){
+    set margins(margins) {
+        if (!margins) {
             return;
         }
 
         // no negative values -> set them silently to 0
-       let key : keyof typeof margins;
-        for ( key in margins) {
-            margins[key] = (margins[key] < 0)? 0: margins[key];
+        let key: keyof typeof margins;
+        for (key in margins) {
+            margins[key] = (margins[key] < 0) ? 0 : margins[key];
         }
 
         this.set(PrintLayoutProperty.MARGINS, margins);
@@ -236,7 +236,8 @@ export class PrintLayout extends Control {
 
 
     protected getScreenMapAspectRatio() {
-        if (!this.getMap()) {
+
+        if (!this.getMap()?.getSize()) {
             return 1;
         }
         const [w, h]: Size = this.getMap()!.getSize()!;
