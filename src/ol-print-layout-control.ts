@@ -50,19 +50,27 @@ const PrintLayoutProperty = {
 
 export type Options = {
     margins?: { top: number; left: number; bottom: number; right: number };
-    format?: string;
-    orientation?: string;
+    format?: typeof PAPER_FORMAT[keyof typeof PAPER_FORMAT];
+    orientation?:  typeof ORIENTATION[keyof typeof ORIENTATION];
 }
 
 export class PrintLayout extends Control {
     private printArea: HTMLDivElement;
 
-    constructor(opt_options?: Options) {
-        const options = opt_options || {};
+    // constructor({format, orientation, margins}: Options = {
+    //     format: PAPER_FORMAT.A4,
+    //     orientation: ORIENTATION.PORTRAIT,
+    //     margins: {top: 2, bottom: 2, left: 2, right: 2}
+    // })
+    constructor(opt_options: Options = {}) {
 
-        const element = document.createElement('div');
-        element.className = 'paper-format';
+        const {
+            format = PAPER_FORMAT.A4,
+            orientation = ORIENTATION.PORTRAIT,
+            margins = {top: 2, bottom: 2, left: 2, right: 2}
+        } = opt_options;
 
+        const {element, printArea} = createDomElements();
 
         super({
             element: element,
@@ -71,14 +79,23 @@ export class PrintLayout extends Control {
             }
         });
 
-        this.printArea = document.createElement('div');
-        this.printArea.className = 'print-area';
-        this.printArea.id = 'print-area';
-        element.appendChild(this.printArea);
+        this.printArea = printArea;
 
-        this.set(PrintLayoutProperty.ORIENTATION, options.orientation || ORIENTATION.PORTRAIT);
-        this.set(PrintLayoutProperty.FORMAT, options.format || PAPER_FORMAT.A4);
-        this.set(PrintLayoutProperty.MARGINS, options.margins || {top: 2, bottom: 2, left: 2, right: 2});
+        // observable properties
+        this.set(PrintLayoutProperty.ORIENTATION, orientation);
+        this.set(PrintLayoutProperty.FORMAT, format);
+        this.set(PrintLayoutProperty.MARGINS, margins);
+        this.set(PrintLayoutProperty.BBOX, null);
+
+        function createDomElements() {
+            const element = document.createElement('div');
+            element.className = 'paper-format';
+            const printArea = document.createElement('div');
+            printArea.className = 'print-area';
+            printArea.id = 'print-area';
+            element.appendChild(printArea);
+            return {element, printArea};
+        }
     }
 
     get paperOrientation() {

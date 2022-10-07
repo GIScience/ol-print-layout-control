@@ -6,7 +6,7 @@ export default defineConfig(({command, mode, ssrBuild}) => {
     console.log(command, mode);
     let baseConfig = {
         test: {
-            environment: 'happy-dom', // or 'jsdom', 'node',
+            environment: 'jsdom', // or 'jsdom', 'happy-dom', 'node',
             dir: 'test',
             coverage:{
                 reportsDirectory: '../coverage'
@@ -47,7 +47,7 @@ export default defineConfig(({command, mode, ssrBuild}) => {
         ...typescript({
             tsconfig: "tsconfig.json",
             clean: true,
-            abortOnError: false,
+            abortOnError: true,
             check: true
         }),
         enforce: 'pre',

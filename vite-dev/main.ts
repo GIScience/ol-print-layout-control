@@ -23,3 +23,14 @@ const printLayoutControl = new PrintLayout({
     margins: {top: 3, left: 2, bottom: 3, right: 2}
 });
 map.addControl(printLayoutControl);
+
+//show current properties
+printLayoutControl.on('change', ()=>{
+    document.getElementById('currentProperties').innerText = `${JSON.stringify(printLayoutControl.getProperties(),null,2)}`
+})
+
+// make it globally available for debugging
+// @ts-ignore
+window.map = map;
+// @ts-ignore
+window.printLayoutControl = printLayoutControl;

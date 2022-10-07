@@ -1,18 +1,22 @@
-import {PrintLayout} from '../src/ol-print-layout-control'
+import {Options, ORIENTATION, PrintLayout} from '../src/ol-print-layout-control'
 import Control from 'ol/control/Control';
-import {View, Map} from 'ol';
+import {Map, View} from 'ol';
 import {fromLonLat} from 'ol/proj';
 import {Tile} from 'ol/layer';
 import {OSM} from 'ol/source';
 import 'ol/ol.css';
-import {describe,it,expect,beforeAll} from 'vitest'
+import {beforeEach, describe, expect, it} from 'vitest'
 
-let map: Map, pl: PrintLayout;
 
-beforeAll(()=>{
+let map: Map,
+    printLayoutInstanceWithDefaultOptions: PrintLayout,
+    customOptions: Readonly<Options>,
+    printLayoutInstanceWithCustomOptions: PrintLayout;
+
+beforeEach(() => {
     const mapDiv = document.createElement('div');
-    mapDiv.style.width = '100%';
-    mapDiv.style.height = '80vh';
+    mapDiv.style.width = '300px';
+    mapDiv.style.height = '400px';
     document.body.appendChild(mapDiv);
 
     map = new Map({
@@ -28,24 +32,49 @@ beforeAll(()=>{
     });
     map.addLayer(osmCartoLayer);
 
-    pl = new PrintLayout({});
+    printLayoutInstanceWithDefaultOptions = new PrintLayout();
+
+    customOptions = Object.freeze({
+        orientation: ORIENTATION.LANDSCAPE,
+        format: 'A0',
+        margins: {top: 3, bottom: 2, left: 1, right: 0}
+    });
+
+
+    printLayoutInstanceWithCustomOptions = new PrintLayout(customOptions);
 })
 
-describe('PrintLayout', ()=>{
-    it('Is instance of ol.control.Control', ()=>{
-        expect(pl).to.be.instanceof(Control);
+describe('PrintLayout class', () => {
+    it('Is instance of ol.control.Control', () => {
+        expect(printLayoutInstanceWithDefaultOptions).to.be.instanceof(Control);
+    });
+});
+
+describe('PrintLayout Instance', () => {
+    it('Can be added to a map', () => {
+        expect(() => map.addControl(printLayoutInstanceWithDefaultOptions)).not.toThrow();
     });
 
-    it('Can be added to a map', ()=>{
-        expect(()=>map.addControl(pl)).not.toThrow();
+    it('Can be removed from a map', () => {
+        map.addControl(printLayoutInstanceWithDefaultOptions);
+        expect(() => map.removeControl(printLayoutInstanceWithDefaultOptions)).not.toThrow();
     });
+});
 
-    it('Can be removed from a map', ()=>{
-        map.addControl(pl);
-        expect(()=>map.removeControl(pl)).not.toThrow();
-    });
+describe('PrintLayout initialize with properties', () => {
 
-    it('should have more tests', () => {
-        throw 'not yet implemented'
-    });
-})
+    it('has expected properties', () => {
+
+        map.addControl(printLayoutInstanceWithCustomOptions);
+
+        //test values
+        const getter = {
+            format: printLayoutInstanceWithCustomOptions.paperFormat,
+            orientation: printLayoutInstanceWithCustomOptions.paperOrientation,
+            margins: printLayoutInstanceWithCustomOptions.margins
+        }
+
+        //assert
+        expect(getter).to.deep.equals(customOptions);
+    })
+});
