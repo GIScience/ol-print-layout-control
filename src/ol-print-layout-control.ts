@@ -6,10 +6,10 @@ import {Size} from 'ol/size';
 import './ol-print-layout-control.css'
 
 // paper
-export const ORIENTATION = {
-    PORTRAIT: 'portrait',
-    LANDSCAPE: 'landscape'
-} as const;
+export enum ORIENTATION {
+    PORTRAIT= 'portrait',
+    LANDSCAPE= 'landscape'
+}
 
 export const PAPER_FORMAT = {
     A4: 'A4',
@@ -98,13 +98,13 @@ export class PrintLayout extends Control {
         }
     }
 
-    get paperOrientation() {
+    getOrientation() {
         return this.get(PrintLayoutProperty.ORIENTATION);
     }
 
-    set paperOrientation(orientation) {
+    setOrientation(orientation: ORIENTATION) {
         if (orientation.toUpperCase() in ORIENTATION) {
-            this.set(PrintLayoutProperty.ORIENTATION, orientation.toUpperCase());
+            this.set(PrintLayoutProperty.ORIENTATION, orientation);
             this.setElementSize();
             if (this.getMap()) {
                 this.getMap()!.renderSync();
@@ -115,6 +115,7 @@ export class PrintLayout extends Control {
             throw new Error(`orientation must be one of: ${Object.values(ORIENTATION)}`)
         }
     }
+
 
     get paperFormat() {
         return this.get(PrintLayoutProperty.FORMAT);
@@ -230,7 +231,7 @@ export class PrintLayout extends Control {
         const horizontalMarginSum = (this.margins.left + this.margins.right) * 10;
         const verticalMarginSum = (this.margins.top + this.margins.bottom) * 10;
 
-        return (this.paperOrientation === ORIENTATION.PORTRAIT) ? {
+        return (this.getOrientation() === ORIENTATION.PORTRAIT) ? {
             width: short - horizontalMarginSum,
             height: long - verticalMarginSum
         } : {
@@ -243,7 +244,7 @@ export class PrintLayout extends Control {
     protected getPrintMarginsInPx(): { top: number; bottom: number; left: number; right: number } {
         const {width, height} = this.element.getBoundingClientRect();
         const {long} = PAPER_SIZE[this.paperFormat];
-        const CM2PX_FACTOR = (this.paperOrientation === ORIENTATION.PORTRAIT) ? height / (long / 10) : width / (long / 10);
+        const CM2PX_FACTOR = (this.getOrientation() === ORIENTATION.PORTRAIT) ? height / (long / 10) : width / (long / 10);
         let marginsPx = {top: 0, bottom: 0, left: 0, right: 0};
         (Object.keys(this.margins) as (keyof typeof this.margins)[]).forEach((key) => {
             marginsPx[key] = this.margins[key] * CM2PX_FACTOR
@@ -267,7 +268,7 @@ export class PrintLayout extends Control {
 
     protected getPaperMapAspectRatio() {
         const {long, short} = PAPER_SIZE[this.paperFormat];
-        return (this.paperOrientation === ORIENTATION.PORTRAIT) ? short / long : long / short;
+        return (this.getOrientation() === ORIENTATION.PORTRAIT) ? short / long : long / short;
     }
 
     protected getRestrictingDimension() {
@@ -288,7 +289,7 @@ export class PrintLayout extends Control {
         const {long, short} = PAPER_SIZE[this.paperFormat];
         const aspectRatioPortrait = short / long;
 
-        this.element.style.aspectRatio = String((this.paperOrientation === ORIENTATION.PORTRAIT) ? aspectRatioPortrait : 1 / aspectRatioPortrait);
+        this.element.style.aspectRatio = String((this.getOrientation() === ORIENTATION.PORTRAIT) ? aspectRatioPortrait : 1 / aspectRatioPortrait);
 
 
         //set print box after paper is defined

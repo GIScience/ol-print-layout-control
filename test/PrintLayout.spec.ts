@@ -70,7 +70,7 @@ describe('PrintLayout initialize with properties', () => {
         //test values
         const getter = {
             format: printLayoutInstanceWithCustomOptions.paperFormat,
-            orientation: printLayoutInstanceWithCustomOptions.paperOrientation,
+            orientation: printLayoutInstanceWithCustomOptions.getOrientation(),
             margins: printLayoutInstanceWithCustomOptions.margins
         }
 
