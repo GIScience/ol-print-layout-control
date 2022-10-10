@@ -1,14 +1,16 @@
 import Control from 'ol/control/Control';
 import {transformExtent} from 'ol/proj';
 import {getDistance} from 'ol/sphere';
-import {Map, MapEvent} from 'ol';
+import {Map, MapEvent, Object as OlObject} from 'ol';
 import {Size} from 'ol/size';
 import './ol-print-layout-control.css'
+import {unByKey} from 'ol/Observable';
+import {EventsKey} from 'ol/events';
 
 // paper
 export enum ORIENTATION {
-    PORTRAIT= 'portrait',
-    LANDSCAPE= 'landscape'
+    PORTRAIT = 'portrait',
+    LANDSCAPE = 'landscape'
 }
 
 export const PAPER_FORMAT = {
@@ -40,34 +42,32 @@ const PAPER_SIZE: { [format: string]: { short: number, long: number } } = {
 
 } as const;
 
+
 const PrintLayoutProperty = {
     BBOX: 'bbox',
     FORMAT: 'format',
     ORIENTATION: 'orientation',
     //in cm
-    MARGINS: 'margins'
+    MARGIN: 'margin'
 }
 
 export type Options = {
-    margins?: { top: number; left: number; bottom: number; right: number };
+    margin?: MarginProps;
     format?: typeof PAPER_FORMAT[keyof typeof PAPER_FORMAT];
-    orientation?:  typeof ORIENTATION[keyof typeof ORIENTATION];
+    orientation?: typeof ORIENTATION[keyof typeof ORIENTATION];
 }
 
 export class PrintLayout extends Control {
     private printArea: HTMLDivElement;
+    private evtKeyMarginChange: EventsKey | undefined;
 
-    // constructor({format, orientation, margins}: Options = {
-    //     format: PAPER_FORMAT.A4,
-    //     orientation: ORIENTATION.PORTRAIT,
-    //     margins: {top: 2, bottom: 2, left: 2, right: 2}
-    // })
+
     constructor(opt_options: Options = {}) {
 
         const {
             format = PAPER_FORMAT.A4,
             orientation = ORIENTATION.PORTRAIT,
-            margins = {top: 2, bottom: 2, left: 2, right: 2}
+            margin = {top: 2, bottom: 2, left: 2, right: 2}
         } = opt_options;
 
         const {element, printArea} = createDomElements();
@@ -84,7 +84,8 @@ export class PrintLayout extends Control {
         // observable properties
         this.set(PrintLayoutProperty.ORIENTATION, orientation);
         this.set(PrintLayoutProperty.FORMAT, format);
-        this.set(PrintLayoutProperty.MARGINS, margins);
+
+        this.setMargin(new Margin(margin));
         this.set(PrintLayoutProperty.BBOX, null);
 
         function createDomElements() {
@@ -116,14 +117,17 @@ export class PrintLayout extends Control {
         }
     }
 
-
-    get paperFormat() {
+    getFormat(){
         return this.get(PrintLayoutProperty.FORMAT);
     }
 
-    set paperFormat(paperFormat) {
-        if (paperFormat.toUpperCase() in PAPER_FORMAT) {
-            this.set(PrintLayoutProperty.FORMAT, paperFormat.toUpperCase());
+    // get paperFormat() {
+    //     return this.get(PrintLayoutProperty.FORMAT);
+    // }
+
+    setFormat(format: typeof PAPER_FORMAT[keyof typeof PAPER_FORMAT]) {
+        if (format.toUpperCase() in PAPER_FORMAT) {
+            this.set(PrintLayoutProperty.FORMAT, format.toUpperCase());
             this.setElementSize();
             if (this.getMap()) {
                 this.getMap()!.renderSync();
@@ -131,26 +135,42 @@ export class PrintLayout extends Control {
             }
             this.changed();
         } else {
-            throw new Error(`paperFormat must be on of: ${Object.values(PAPER_FORMAT)}`)
+            throw new Error(`format must be on of: ${Object.values(PAPER_FORMAT)}`)
         }
     }
 
-    get margins(): { top: number, bottom: number, left: number, right: number } {
-        return this.get(PrintLayoutProperty.MARGINS);
+    // set paperFormat(paperFormat) {
+    //     if (paperFormat.toUpperCase() in PAPER_FORMAT) {
+    //         this.set(PrintLayoutProperty.FORMAT, paperFormat.toUpperCase());
+    //         this.setElementSize();
+    //         if (this.getMap()) {
+    //             this.getMap()!.renderSync();
+    //             this.handleBboxChange();
+    //         }
+    //         this.changed();
+    //     } else {
+    //         throw new Error(`paperFormat must be on of: ${Object.values(PAPER_FORMAT)}`)
+    //     }
+    // }
+
+    getMargin(): Margin {
+        return this.get(PrintLayoutProperty.MARGIN);
     }
 
-    set margins(margins) {
-        if (!margins) {
-            return;
+    setMargin(margin: Margin) {
+        if (this.evtKeyMarginChange) {
+            unByKey(this.evtKeyMarginChange)
         }
+        this.evtKeyMarginChange = margin.on('change', () => {
+            this.setElementSize();
+            if (this.getMap()) {
+                this.getMap()!.renderSync();
+                this.handleBboxChange();
+            }
+            this.changed();
+        });
 
-        // no negative values -> set them silently to 0
-        let key: keyof typeof margins;
-        for (key in margins) {
-            margins[key] = (margins[key] < 0) ? 0 : margins[key];
-        }
-
-        this.set(PrintLayoutProperty.MARGINS, margins);
+        this.set(PrintLayoutProperty.MARGIN, margin);
         this.setElementSize();
         if (this.getMap()) {
             this.getMap()!.renderSync();
@@ -227,9 +247,9 @@ export class PrintLayout extends Control {
     }
 
     getPrintBoxSizeInMM() {
-        const {short, long}: { short: number, long: number } = PAPER_SIZE[this.paperFormat];
-        const horizontalMarginSum = (this.margins.left + this.margins.right) * 10;
-        const verticalMarginSum = (this.margins.top + this.margins.bottom) * 10;
+        const {short, long}: { short: number, long: number } = PAPER_SIZE[this.getFormat()];
+        const horizontalMarginSum = (this.getMargin().getLeft() + this.getMargin().getRight()) * 10;
+        const verticalMarginSum = (this.getMargin().getTop() + this.getMargin().getBottom()) * 10;
 
         return (this.getOrientation() === ORIENTATION.PORTRAIT) ? {
             width: short - horizontalMarginSum,
@@ -241,14 +261,18 @@ export class PrintLayout extends Control {
     }
 
     //screenPixel
-    protected getPrintMarginsInPx(): { top: number; bottom: number; left: number; right: number } {
+    protected getPrintMarginsInPx(): MarginProps {
         const {width, height} = this.element.getBoundingClientRect();
-        const {long} = PAPER_SIZE[this.paperFormat];
+        const {long} = PAPER_SIZE[this.getFormat()];
         const CM2PX_FACTOR = (this.getOrientation() === ORIENTATION.PORTRAIT) ? height / (long / 10) : width / (long / 10);
         let marginsPx = {top: 0, bottom: 0, left: 0, right: 0};
-        (Object.keys(this.margins) as (keyof typeof this.margins)[]).forEach((key) => {
-            marginsPx[key] = this.margins[key] * CM2PX_FACTOR
-        });
+        let marginsCm = this.getMargin().getProperties();
+
+        let key: keyof MarginProps;
+        for (key in marginsCm) {
+            marginsPx[key] = marginsCm[key] * CM2PX_FACTOR;
+        }
+
         return marginsPx;
     }
 
@@ -267,7 +291,7 @@ export class PrintLayout extends Control {
     }
 
     protected getPaperMapAspectRatio() {
-        const {long, short} = PAPER_SIZE[this.paperFormat];
+        const {long, short} = PAPER_SIZE[this.getFormat()];
         return (this.getOrientation() === ORIENTATION.PORTRAIT) ? short / long : long / short;
     }
 
@@ -286,7 +310,7 @@ export class PrintLayout extends Control {
         }
 
         //set aspect ratio
-        const {long, short} = PAPER_SIZE[this.paperFormat];
+        const {long, short} = PAPER_SIZE[this.getFormat()];
         const aspectRatioPortrait = short / long;
 
         this.element.style.aspectRatio = String((this.getOrientation() === ORIENTATION.PORTRAIT) ? aspectRatioPortrait : 1 / aspectRatioPortrait);
@@ -336,6 +360,79 @@ export class PrintLayout extends Control {
     }
 }
 
+type MarginProps = { top: number, bottom: number, left: number, right: number };
+
+export class Margin extends OlObject {
+
+    constructor(marginProps: Partial<MarginProps> = {}) {
+        super();
+        const {top = 0, bottom = 0, left = 0, right = 0} = marginProps;
+
+        this.set('top', top);
+        this.set('bottom', bottom);
+        this.set('left', left);
+        this.set('right', right);
+    }
+
+
+
+    getProperties(): MarginProps {
+        return <MarginProps>super.getProperties();
+    }
+
+    getTop() {
+        return this.get('top');
+    }
+
+    setTop(topMarginInCm: number) {
+
+        //no negative values, cast to numbers
+        topMarginInCm = Math.max(0, Number(topMarginInCm));
+
+        this.set('top', topMarginInCm);
+        this.changed();
+    }
+
+    getBottom() {
+        return this.get('bottom');
+    }
+
+    setBottom(bottomMarginInCm: number) {
+
+        //no negative values, cast to numbers
+        bottomMarginInCm = Math.max(0, Number(bottomMarginInCm));
+
+        this.set('bottom', bottomMarginInCm);
+        this.changed();
+    }
+
+    getLeft() {
+        return this.get('left');
+    }
+
+    setLeft(leftMarginInCm: number) {
+
+        //no negative values, cast to numbers
+        leftMarginInCm = Math.max(0, Number(leftMarginInCm));
+
+        this.set('left', leftMarginInCm);
+        this.changed();
+    }
+
+    getRight() {
+        return this.get('right');
+    }
+
+    setRight(rightMarginInCm: number) {
+
+        //no negative values, cast to numbers
+        rightMarginInCm = Math.max(0, Number(rightMarginInCm));
+
+        this.set('right', rightMarginInCm);
+        this.changed();
+    }
+}
+
 // Expose PrintLayout as ol.control.PrintLayout if using a full build of
 // OpenLayers
 
@@ -344,6 +441,8 @@ export class PrintLayout extends Control {
 if (window['ol'] && window['ol']['control']) {
     // @ts-ignore
     window['ol']['control']['PrintLayout'] = PrintLayout;
+    // @ts-ignore
+    window['ol']['control']['PrintLayout']['Margin'] = Margin;
     // @ts-ignore
     window['PAPER_FORMAT'] = PAPER_FORMAT;
     // @ts-ignore

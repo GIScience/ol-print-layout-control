@@ -37,7 +37,7 @@ beforeEach(() => {
     customOptions = Object.freeze({
         orientation: ORIENTATION.LANDSCAPE,
         format: 'A0',
-        margins: {top: 3, bottom: 2, left: 1, right: 0}
+        margin: {top: 3, bottom: 2, left: 1, right: 0}
     });
 
 
@@ -69,9 +69,9 @@ describe('PrintLayout initialize with properties', () => {
 
         //test values
         const getter = {
-            format: printLayoutInstanceWithCustomOptions.paperFormat,
+            format: printLayoutInstanceWithCustomOptions.getFormat(),
             orientation: printLayoutInstanceWithCustomOptions.getOrientation(),
-            margins: printLayoutInstanceWithCustomOptions.margins
+            margin: printLayoutInstanceWithCustomOptions.getMargin().getProperties()
         }
 
         //assert

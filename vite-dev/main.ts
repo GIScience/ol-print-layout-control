@@ -20,7 +20,7 @@ const map = new Map({
 const printLayoutControl = new PrintLayout({
     format: PAPER_FORMAT.A4,
     orientation: ORIENTATION.PORTRAIT,
-    margins: {top: 3, left: 2, bottom: 3, right: 2}
+    margin: {top: 3, left: 2, bottom: 3, right: 2}
 });
 map.addControl(printLayoutControl);
 
