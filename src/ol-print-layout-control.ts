@@ -1,11 +1,12 @@
+import './ol-print-layout-control.css';
 import Control from 'ol/control/Control';
 import {transformExtent} from 'ol/proj';
 import {getDistance} from 'ol/sphere';
 import {Map, MapEvent, Object as OlObject} from 'ol';
 import {Size} from 'ol/size';
-import './ol-print-layout-control.css'
 import {unByKey} from 'ol/Observable';
 import {EventsKey} from 'ol/events';
+import {ObjectEvent} from 'ol/Object';
 
 // paper
 export enum ORIENTATION {
@@ -117,13 +118,9 @@ export class PrintLayout extends Control {
         }
     }
 
-    getFormat(){
+    getFormat() {
         return this.get(PrintLayoutProperty.FORMAT);
     }
-
-    // get paperFormat() {
-    //     return this.get(PrintLayoutProperty.FORMAT);
-    // }
 
     setFormat(format: typeof PAPER_FORMAT[keyof typeof PAPER_FORMAT]) {
         if (format.toUpperCase() in PAPER_FORMAT) {
@@ -139,20 +136,6 @@ export class PrintLayout extends Control {
         }
     }
 
-    // set paperFormat(paperFormat) {
-    //     if (paperFormat.toUpperCase() in PAPER_FORMAT) {
-    //         this.set(PrintLayoutProperty.FORMAT, paperFormat.toUpperCase());
-    //         this.setElementSize();
-    //         if (this.getMap()) {
-    //             this.getMap()!.renderSync();
-    //             this.handleBboxChange();
-    //         }
-    //         this.changed();
-    //     } else {
-    //         throw new Error(`paperFormat must be on of: ${Object.values(PAPER_FORMAT)}`)
-    //     }
-    // }
-
     getMargin(): Margin {
         return this.get(PrintLayoutProperty.MARGIN);
     }
@@ -161,11 +144,19 @@ export class PrintLayout extends Control {
         if (this.evtKeyMarginChange) {
             unByKey(this.evtKeyMarginChange)
         }
-        this.evtKeyMarginChange = margin.on('change', () => {
+
+        this.evtKeyMarginChange = margin.on('propertychange', () => {
             this.setElementSize();
             if (this.getMap()) {
                 this.getMap()!.renderSync();
                 this.handleBboxChange();
+            }
+
+            if (this.hasListener('change:margin')) {
+                this.dispatchEvent(new ObjectEvent('change:margin', PrintLayoutProperty.MARGIN, null));
+            }
+            if (this.hasListener('propertychange')) {
+                this.dispatchEvent(new ObjectEvent('propertychange', PrintLayoutProperty.MARGIN, null));
             }
             this.changed();
         });
@@ -179,7 +170,7 @@ export class PrintLayout extends Control {
         this.changed();
     }
 
-    get bbox() {
+    getBbox() {
         // if not has map -> nothing we can do --> null
         if (!this.getMap()) {
             return null;
@@ -188,8 +179,8 @@ export class PrintLayout extends Control {
         return this.get('bbox');
     }
 
-    get bboxAsLonLat() {
-        return (this.bbox) ? transformExtent(this.bbox, 'EPSG:3857', 'EPSG:4326') : null;
+    getBboxAsLonLat() {
+        return (this.getBbox()) ? transformExtent(this.getBbox(), 'EPSG:3857', 'EPSG:4326') : null;
     }
 
     protected computeBbox() {
@@ -211,13 +202,16 @@ export class PrintLayout extends Control {
         return [...lowerLeft, ...upperRight];
     }
 
-    getPrintMapScaleDenominator() {
-        if (!this.bboxAsLonLat) {
+    /**
+     * Computes the scale denominator for the printed map
+     */
+    getScaleDenominator() {
+        if (this.getBboxAsLonLat() == null) {
             return null;
         }
-        const bbox4326 = this.bboxAsLonLat;
-        const lowerLeft = bbox4326.slice(0, 2);
-        const lowerRight = bbox4326.slice(2, 4);
+        const bbox4326 = this.getBboxAsLonLat();
+        const lowerLeft = bbox4326!.slice(0, 2);
+        const lowerRight = bbox4326!.slice(2, 4);
         //haversine distance from lower left to lower right corner
         const horizontalDistanceInMeter = getDistance(lowerLeft, lowerRight);
         //width of box in MM
@@ -373,7 +367,6 @@ export class Margin extends OlObject {
         this.set('left', left);
         this.set('right', right);
     }
-
 
 
     getProperties(): MarginProps {
