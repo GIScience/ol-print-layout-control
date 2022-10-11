@@ -29,3 +29,7 @@ After `import` from the module it will be available as `new PrintLayout()`.
 npm install @giscience/ol-print-layout-control
 ```
 
+# Related
+
+Originally `ol-print-layout-control` has been developed and is used for the 
+[SketchMapTool](https://github.com/GIScience/sketch-map-tool). 
