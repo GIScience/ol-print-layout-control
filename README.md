@@ -8,6 +8,12 @@ It Helps the user to define a map area that fits to the desired output page form
 
 Works with ol@^7.0.0.
 
+
+
+https://user-images.githubusercontent.com/2814068/195178883-d71411bc-ce08-494f-b64d-93f8c48c0bc6.mp4
+
+
+
 # Usage
 
 ## Browser
