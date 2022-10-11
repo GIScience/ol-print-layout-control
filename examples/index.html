@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ol-print-layout-control: Basic example</title>
+    <script src="https://cdn.jsdelivr.net/npm/ol@v7.1.0/dist/ol.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v7.1.0/ol.css">
+
+    <script src="../dist/ol-print-layout-control.js"></script>
+    <link rel="stylesheet" href="../dist/ol-print-layout-control.css">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="viewportContainer">
+    <div id="mainColumn">
+        <header>
+            <h1>ol-print-layout-control: Basic example</h1>
+            <img id="logo" src="https://heigit.org/wp-content/uploads/2018/01/HeiGIT_Logo_cut-505x100.png">
+        </header>
+        <main>
+            <div id="map"></div>
+            <div id="right">
+                <div id="top">
+                    <h2>User Input</h2>
+
+
+                    <div class="formRow">
+                        <label>Paper format</label>
+                        <div class="formInput">
+                            <select id="format"></select>
+                            <span class="code-snip">.paperFormat = {'A4' | 'A3' | ... | 'A0' | ...}</span>
+                        </div>
+                    </div>
+
+                    <div class="formRow">
+                        <label>Paper orientation</label>
+                        <div class="formInput">
+                            <select id="orientation"></select>
+                            <span class="code-snip">.setOrientation( 'landscape' | 'portrait' )</span>
+                        </div>
+                    </div>
+
+                    <div class="formRow">
+                        <label>Margin (cm): top, bottom, left, right</label>
+                        <div class="formInput">
+                            <div id="fourNumbersInput">
+                                <input id="marginTop" type="number" value="2" min="0">
+                                <input id="marginBottom" type="number" value="2" min="0">
+                                <input id="marginLeft" type="number" value="2" min="0">
+                                <input id="marginRight" type="number" value="2" min="0">
+                            </div>
+                            <span class="code-snip">.getMargin().setTop(marginInCm)</span>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+                <div id="bottom">
+                    <h2>Properties</h2>
+                    <div class="flexRow">
+
+                        <div class="props">
+                            <span class="code-snip">.getFormat()</span>
+                            <pre id="formatProperties"></pre>
+                        </div>
+
+                        <div class="props">
+                            <span class="code-snip">.getOrientation()</span>
+                            <pre id="orientationProperties"></pre>
+                        </div>
+
+                        <div class="props">
+                            <span class="code-snip">getMargin().getProperties()</span>
+                            <pre id="marginProperties"></pre>
+                        </div>
+
+                        <div class="props">
+                            <span class="code-snip">.getBbox()</span>
+                            <pre id="bboxProperties"></pre>
+                        </div>
+
+
+                    </div>
+                    <h2>Methods</h2>
+                    <div class="flexRow">
+                        <div class="props">
+                            <span class="code-snip">.getBboxAsLonLat()</span>
+                            <pre id="bboxAsLonLatMethod"></pre>
+                        </div>
+                        <div class="props">
+                            <span class="code-snip">.getScaleDenominator()</span>
+                            <pre id="scaleDenominatorMethod"></pre>
+                        </div>
+
+                        <div class="props">
+                            <span class="code-snip">.getPrintBoxSizeInDots(dpi = <input id="dpi" type="number" value="192" min="1">)</span>
+                            <pre id="printBoxSizeInDotsMethod"></pre>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+
+<script src="map.js"></script>
+<script src="event-binding.js"></script>
+</body>
+</html>

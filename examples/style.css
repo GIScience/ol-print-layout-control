@@ -1,0 +1,163 @@
+body {
+    margin: 0;
+}
+
+#viewportContainer{
+    font-family: "Noto Sans", sans-serif;
+    font-size: 12pt;
+
+    display: flex;
+    flex-direction: column;
+
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+#mainColumn{
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+
+    /* for Firefox */
+    min-height: 0;
+}
+
+header {
+    padding: 0 1rem;
+    display: flex;
+    justify-content: space-between;
+    height: fit-content;
+    box-shadow: gray 3px 3px 3px;
+    margin-bottom: 3px;
+}
+
+header #logo {
+    margin: 0.5rem 0;
+    height: 4rem;
+}
+
+main {
+    flex: 1;
+    min-height: 0;
+
+    display: flex;
+    /*gap: 1rem;*/
+    flex-wrap: wrap;
+    align-items: stretch;
+}
+
+#map {
+    flex: 1 1 0;
+    min-height: 300px;
+    min-width: 300px;
+    max-height: 100%;
+}
+
+#right {
+    flex: 1 1 0;
+    min-width: 300px;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 0 1rem 1rem;
+    box-sizing: border-box;
+    max-height: 100%;
+    overflow-y: auto;
+}
+
+#top {
+    /*flex: 1 1 auto;*/
+}
+
+#bottom {
+    flex: 1 1 auto;
+}
+
+.flexRow {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.formRow {
+    margin-bottom: 1rem;
+    white-space: nowrap;
+}
+
+label {
+    font-weight: bold;
+    /*margin-top: 2rem;*/
+    display: inline-block;
+}
+
+.formInput{
+    display: flex;
+    align-items: last baseline;
+    gap: 1rem;
+    line-height: 2rem;
+}
+
+.formInput select, .formInput input {
+    display: block;
+    height: 2rem;
+    /*margin-top: 0.5rem;*/
+    /*margin-bottom: 0.5rem;*/
+    width: 200px;
+    font-weight: bold;
+
+}
+
+
+.formInput input[type=number] {
+    display: inline-block;
+    width: 46px;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+.code-snip {
+    font-family: monospace;
+    background-color: steelblue;
+    color: white;
+    font-weight: bold;
+    border-radius: 0.3rem;
+    border: 1px solid #41444E;
+    padding: 0 0.5rem;
+    white-space: nowrap;
+    /*flex: auto;*/
+}
+
+.props {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 0;
+    /*min-width: 300px;*/
+}
+
+.props pre {
+    background-color: #41444E;
+    color: white;
+    margin: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0.3rem;
+    border-bottom-left-radius: 0.3rem;
+    padding: 0.5rem 1rem;
+    flex-grow: 1;
+    overflow: scroll;
+}
+
+.props .code-snip {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+#dpi {
+    width: 4rem;
+}
