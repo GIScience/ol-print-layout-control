@@ -10,7 +10,7 @@ Works with ol@^7.0.0.
 
 
 
-https://user-images.githubusercontent.com/2814068/195178883-d71411bc-ce08-494f-b64d-93f8c48c0bc6.mp4
+https://user-images.githubusercontent.com/2814068/195790425-99978d1a-6619-47a9-93b5-8c642664af5e.mp4
 
 
 
