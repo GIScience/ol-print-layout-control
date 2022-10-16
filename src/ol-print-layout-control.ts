@@ -27,10 +27,6 @@ export const PAPER_FORMAT = {
 
 const INCH2MM = 25.4;
 
-/**
- * Paper dimensions in mm
- * @type {{A1: {short: number, long: number}, A2: {short: number, long: number}, A3: {short: number, long: number}, LETTER: {short: number, long: number}, A4: {short: number, long: number}, BROADSHEET: {short: number, long: number}, A0: {short: number, long: number}, TABLOID: {short: number, long: number}}}
- */
 const PAPER_SIZE: { [format: string]: { short: number, long: number } } = {
     A4: {short: 210, long: 297},
     A3: {short: 297, long: 420},
@@ -58,6 +54,11 @@ export type Options = {
     orientation?: typeof ORIENTATION[keyof typeof ORIENTATION];
 }
 
+/**
+ * The print-layout-control.
+ * Add an instance of this to your openlayers Map.
+ * @param {Options} [{format: 'A4', orientation: 'portrait', margin: {top: 2, bottom: 2, left: 2, right: 2}}] opt_options
+ */
 export class PrintLayout extends Control {
     private printArea: HTMLDivElement;
     private evtKeyMarginChange: EventsKey | undefined;
@@ -100,10 +101,17 @@ export class PrintLayout extends Control {
         }
     }
 
+    /**
+     * @public
+     */
     getOrientation() {
         return this.get(PrintLayoutProperty.ORIENTATION);
     }
 
+    /**
+     * @public
+     * @param {ORIENTATION} orientation
+     */
     setOrientation(orientation: ORIENTATION) {
         if (orientation.toUpperCase() in ORIENTATION) {
             this.set(PrintLayoutProperty.ORIENTATION, orientation);
@@ -118,10 +126,17 @@ export class PrintLayout extends Control {
         }
     }
 
+    /**
+     * @public
+     */
     getFormat() {
         return this.get(PrintLayoutProperty.FORMAT);
     }
 
+    /**
+     * @public
+     * @param format
+     */
     setFormat(format: typeof PAPER_FORMAT[keyof typeof PAPER_FORMAT]) {
         if (format.toUpperCase() in PAPER_FORMAT) {
             this.set(PrintLayoutProperty.FORMAT, format.toUpperCase());
@@ -136,10 +151,17 @@ export class PrintLayout extends Control {
         }
     }
 
+    /**
+     * @public
+     */
     getMargin(): Margin {
         return this.get(PrintLayoutProperty.MARGIN);
     }
 
+    /**
+     * @public
+     * @param {Margin} margin
+     */
     setMargin(margin: Margin) {
         if (this.evtKeyMarginChange) {
             unByKey(this.evtKeyMarginChange)
@@ -170,6 +192,9 @@ export class PrintLayout extends Control {
         this.changed();
     }
 
+    /**
+     * @public
+     */
     getBbox() {
         // if not has map -> nothing we can do --> null
         if (!this.getMap()) {
@@ -179,6 +204,9 @@ export class PrintLayout extends Control {
         return this.get('bbox');
     }
 
+    /**
+     * @public
+     */
     getBboxAsLonLat() {
         return (this.getBbox()) ? transformExtent(this.getBbox(), 'EPSG:3857', 'EPSG:4326') : null;
     }
@@ -204,6 +232,7 @@ export class PrintLayout extends Control {
 
     /**
      * Computes the scale denominator for the printed map
+     * @public
      */
     getScaleDenominator() {
         if (this.getBboxAsLonLat() == null) {
@@ -226,6 +255,7 @@ export class PrintLayout extends Control {
      * Get the print box size (width, height) in dots (px) for printing.
      *
      * This is useful to determine the OGC-WMS params 'WIDTH' and 'HEIGHT'
+     * @public
      * @param dpi {number} the desired print resolution in dots-per-inch (dpi)
      * @returns {{width: number, height: number}}
      */
@@ -240,6 +270,9 @@ export class PrintLayout extends Control {
         }
     }
 
+    /**
+     * @public
+     */
     getPrintBoxSizeInMM() {
         const {short, long}: { short: number, long: number } = PAPER_SIZE[this.getFormat()];
         const horizontalMarginSum = (this.getMargin().getLeft() + this.getMargin().getRight()) * 10;
@@ -354,8 +387,14 @@ export class PrintLayout extends Control {
     }
 }
 
+/**
+ *
+ */
 type MarginProps = { top: number, bottom: number, left: number, right: number };
 
+/**
+ * The Margin Class to set paper margins in cm.
+ */
 export class Margin extends OlObject {
 
     constructor(marginProps: Partial<MarginProps> = {}) {
@@ -368,15 +407,24 @@ export class Margin extends OlObject {
         this.set('right', right);
     }
 
-
+    /**
+     * @public
+     */
     getProperties(): MarginProps {
         return <MarginProps>super.getProperties();
     }
 
+    /**
+     * @public
+     */
     getTop() {
         return this.get('top');
     }
 
+    /**
+     * @public
+     * @param topMarginInCm
+     */
     setTop(topMarginInCm: number) {
 
         //no negative values, cast to numbers
@@ -386,10 +434,17 @@ export class Margin extends OlObject {
         this.changed();
     }
 
+    /**
+     * @public
+     */
     getBottom() {
         return this.get('bottom');
     }
 
+    /**
+     * @public
+     * @param bottomMarginInCm
+     */
     setBottom(bottomMarginInCm: number) {
 
         //no negative values, cast to numbers
@@ -399,10 +454,17 @@ export class Margin extends OlObject {
         this.changed();
     }
 
+    /**
+     * @public
+     */
     getLeft() {
         return this.get('left');
     }
 
+    /**
+     * @public
+     * @param leftMarginInCm
+     */
     setLeft(leftMarginInCm: number) {
 
         //no negative values, cast to numbers
@@ -412,10 +474,17 @@ export class Margin extends OlObject {
         this.changed();
     }
 
+    /**
+     * @public
+     */
     getRight() {
         return this.get('right');
     }
 
+    /**
+     * @public
+     * @param rightMarginInCm
+     */
     setRight(rightMarginInCm: number) {
 
         //no negative values, cast to numbers
