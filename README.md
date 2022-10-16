@@ -20,9 +20,31 @@ https://user-images.githubusercontent.com/2814068/195178883-d71411bc-ce08-494f-b
 Load `ol-print-layout-control.js` after OpenLayers. 
 
 It will be available as `new ol.control.PrintLayout()`
-```shell
+```javascript
 <script src="https://unpkg.com/@giscience/ol-print-layout-control"></script>
 <link rel="stylesheet" href="https://unpkg.com/@giscience/ol-print-layout-control/dist/ol-print-layout-control.css" />
+
+<script>
+const map = new ol.Map({
+    target: 'map',
+    view: new ol.View({
+        center: ol.proj.fromLonLat([8.68, 49.41]),
+        zoom: 15
+    }),
+    layers: [
+        new ol.layer.Tile({
+            source: new ol.source.OSM()
+        })
+    ]
+});
+
+const printLayoutControl = new ol.control.PrintLayout({
+    format: PAPER_FORMAT.A3,
+    orientation: ORIENTATION.LANDSCAPE,
+    margin: {top: 2, bottom: 2, left: 2, right: 2}
+});
+map.addControl(printLayoutControl);
+</script>
 ```
 
 
@@ -37,5 +59,5 @@ npm install @giscience/ol-print-layout-control
 
 # Related
 
-Originally `ol-print-layout-control` has been developed and is used for the 
+Originally `ol-print-layout-control` has been developed for the 
 [SketchMapTool](https://github.com/GIScience/sketch-map-tool). 
