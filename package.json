@@ -1,6 +1,6 @@
 {
   "name": "@giscience/ol-print-layout-control",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "An extension of an Openlayers Control. It Helps the user to define a map area that fits to the desired output page format and orientation.",
   "files": [
     "dist"
