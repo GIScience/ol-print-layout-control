@@ -3,15 +3,106 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Vite + TS</title>
+    <title>ol-print-layout-control</title>
+    <style>
+        .formRow {
+            margin-bottom: 1rem;
+            white-space: nowrap;
+        }
+
+        label {
+            font-weight: bold;
+            /*margin-top: 2rem;*/
+            display: inline-block;
+        }
+
+        .formInput{
+            display: flex;
+            align-items: last baseline;
+            gap: 1rem;
+            line-height: 2rem;
+        }
+
+        .formInput select, .formInput input {
+            display: block;
+            height: 2rem;
+            /*margin-top: 0.5rem;*/
+            /*margin-bottom: 0.5rem;*/
+            width: 200px;
+            font-weight: bold;
+
+        }
+
+
+        .formInput input[type=number] {
+            display: inline-block;
+            width: 46px;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        .code-snip {
+            font-family: monospace;
+            background-color: steelblue;
+            color: white;
+            font-weight: bold;
+            border-radius: 0.3rem;
+            border: 1px solid #41444E;
+            padding: 0 0.5rem;
+            white-space: nowrap;
+            /*flex: auto;*/
+        }
+    </style>
 </head>
 <body>
-<h1>ol PrintLayout Control</h1>
+<h1>ol-print-layout-control</h1>
 <p>Fixed width and height</p>
-<div id="map" style="width: 600px; height: 400px;"></div>
+<div id="left" style="display: inline-block">
+    <div id="map" style="width: 600px; height: 400px;"></div>
+</div>
+<div id="right" style="display: inline-block">
+    <div id="top">
+        <h2>User Input</h2>
+        <div class="formRow">
+            <label>Paper format</label>
+            <div class="formInput">
+                <select id="format"></select>
+                <span class="code-snip">.setFormat( 'A4' | 'A3' | ... | 'A0' | ... )</span>
+            </div>
+        </div>
 
-<p>getProperties():</p>
-<pre id="currentProperties"></pre>
+        <div class="formRow">
+            <label>Paper orientation</label>
+            <div class="formInput">
+                <select id="orientation"></select>
+                <span class="code-snip">.setOrientation( 'landscape' | 'portrait' )</span>
+            </div>
+        </div>
+
+        <div class="formRow">
+            <label>Margin (cm): top, bottom, left, right</label>
+            <div class="formInput">
+                <div id="fourNumbersInput">
+                    <input id="marginTop" type="number" value="2" min="0">
+                    <input id="marginBottom" type="number" value="2" min="0">
+                    <input id="marginLeft" type="number" value="2" min="0">
+                    <input id="marginRight" type="number" value="2" min="0">
+                </div>
+                <span class="code-snip">.getMargin().setTop(marginInCm)</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+    <p>getProperties():</p>
+<pre id="marginProperties"></pre>
 <div id="form-controls">
 
 </div>
