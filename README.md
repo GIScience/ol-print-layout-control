@@ -8,9 +8,7 @@ It Helps the user to define a map area that fits to the desired output page form
 
 Works with ol@^7.0.0.
 
-
 https://user-images.githubusercontent.com/2814068/195790425-99978d1a-6619-47a9-93b5-8c642664af5e.mp4
-
 
 # Usage
 
@@ -20,7 +18,7 @@ Load `ol-print-layout-control.js` after OpenLayers.
 
 It will be available as `new ol.control.PrintLayout()`
 
-```javascript
+```html
 <script src="https://unpkg.com/@giscience/ol-print-layout-control"></script>
 <link rel="stylesheet" href="https://unpkg.com/@giscience/ol-print-layout-control/dist/ol-print-layout-control.css" />
 
@@ -101,7 +99,7 @@ After `import` from the module it will be available as `new PrintLayout()`.
 **Extends Control**
 
 The print-layout-control.
-Add an instance of this to your openlayers Map.
+Add an instance of this to your OpenLayers Map.
 
 ### Parameters
 

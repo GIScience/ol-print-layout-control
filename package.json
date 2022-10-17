@@ -1,7 +1,7 @@
 {
   "name": "@giscience/ol-print-layout-control",
   "version": "1.0.0",
-  "description": "An extension of an Openlayers Control. It Helps the user to define a map area that fits to the desired output page format and orientation.",
+  "description": "An extension of an OpenLayers Control. It Helps the user to define a map area that fits to the desired output page format and orientation.",
   "files": [
     "dist"
   ],
@@ -18,7 +18,7 @@
     "coverage": "vitest run --coverage",
     "dev": "vite",
     "build": "vite build",
-    "preversion": "npm run test && npm run build && npm run docs"
+    "preversion": "npm run test -- --run && npm run build && npm run docs"
   },
   "repository": {
     "type": "git",
@@ -30,7 +30,7 @@
     "control",
     "print-layout"
   ],
-  "author": "M. Auer (http://heigit.org)",
+  "author": "M. Auer (https://heigit.org)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/GIScience/ol-print-layout-control/issues"
