@@ -56,7 +56,7 @@ export type Options = {
 
 /**
  * The print-layout-control.
- * Add an instance of this to your openlayers Map.
+ * Add an instance of this to your OpenLayers Map.
  * @param {Options} [{format: 'A4', orientation: 'portrait', margin: {top: 2, bottom: 2, left: 2, right: 2}}] opt_options
  */
 export class PrintLayout extends Control {
