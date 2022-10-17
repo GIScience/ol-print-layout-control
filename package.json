@@ -5,7 +5,7 @@
   "files": [
     "dist"
   ],
-  "main": "ol-print-layout-control.js",
+  "main": "dist/ol-print-layout-control.js",
   "types": "./dist/ol-print-layout-control.d.ts",
   "exports": {
     ".": {
