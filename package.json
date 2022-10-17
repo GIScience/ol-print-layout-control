@@ -18,7 +18,8 @@
     "coverage": "vitest run --coverage",
     "dev": "vite",
     "build": "vite build",
-    "preversion": "npm run test -- --run && npm run build && npm run docs"
+    "preversion": "npm run test -- --run",
+    "version": "npm run build && npm run docs"
   },
   "repository": {
     "type": "git",
