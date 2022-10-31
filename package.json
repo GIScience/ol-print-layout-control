@@ -10,6 +10,9 @@
   "exports": {
     ".": {
       "default": "./dist/ol-print-layout-control.js"
+    },
+    "./dist/ol-print-layout-control.css": {
+      "default": "./dist/ol-print-layout-control.css"
     }
   },
   "scripts": {
