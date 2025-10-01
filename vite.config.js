@@ -23,7 +23,7 @@ export default defineConfig(({command, mode, ssrBuild}) => {
                 name: 'ol-print-layout-control', // fileName: 'PrintLayout',
                 fileName: () => 'ol-print-layout-control.js',
                 cssFileName: 'ol-print-layout-control',
-                formats: ['umd']
+                formats: ['es']
             },
             sourcemap: true,
             rollupOptions: {

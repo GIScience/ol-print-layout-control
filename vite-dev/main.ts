@@ -1,4 +1,5 @@
-import {ORIENTATION, PAPER_FORMAT, PrintLayout} from '../src/ol-print-layout-control'
+import {ORIENTATION, PAPER_FORMAT, PrintLayout} from '../dist/ol-print-layout-control'
+import '../dist/ol-print-layout-control.css'
 import {Map, View} from 'ol';
 import {fromLonLat} from 'ol/proj';
 import TileLayer from 'ol/layer/Tile';
