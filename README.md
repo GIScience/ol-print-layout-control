@@ -148,7 +148,7 @@ This is useful to determine the OGC-WMS params 'WIDTH' and 'HEIGHT'
 
 #### Parameters
 
-*   `dpi`  {number} the desired print resolution in dots-per-inch (dpi) (optional, default `192`)
+*   `dpi` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** {number} the desired print resolution in dots-per-inch (dpi) (optional, default `192`)
 
 Returns **{width: [number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number), height: [number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)}**&#x20;
 
