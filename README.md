@@ -6,7 +6,7 @@ Add this OpenLayers-Control to your OpenLayers-Map.
 
 It Helps the user to define a map area that fits to the desired output page format and orientation.
 
-Works with ol@^7.0.0.
+Works with openlayers >= v7.0.0
 
 https://user-images.githubusercontent.com/2814068/195790425-99978d1a-6619-47a9-93b5-8c642664af5e.mp4
 

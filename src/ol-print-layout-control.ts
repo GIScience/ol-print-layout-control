@@ -226,7 +226,6 @@ export class PrintLayout extends Control {
 
         const lowerLeft = this.getMap()!.getCoordinateFromPixel([rel_left, rel_bottom]);
         const upperRight = this.getMap()!.getCoordinateFromPixel([rel_right, rel_top]);
-
         return [...lowerLeft, ...upperRight];
     }
 
@@ -259,7 +258,7 @@ export class PrintLayout extends Control {
      * @param dpi {number} the desired print resolution in dots-per-inch (dpi)
      * @returns {{width: number, height: number}}
      */
-    getPrintBoxSizeInDots(dpi = 192) {
+    getPrintBoxSizeInDots(dpi: number = 192): { width: number; height: number; } {
         const {width: widthInMM, height: heightInMM} = this.getPrintBoxSizeInMM();
         const widthInInch = widthInMM / INCH2MM;
         const heightInInch = heightInMM / INCH2MM;

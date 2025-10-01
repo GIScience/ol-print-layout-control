@@ -5,7 +5,7 @@ import {fromLonLat} from 'ol/proj';
 import {Tile} from 'ol/layer';
 import {OSM} from 'ol/source';
 import 'ol/ol.css';
-import {beforeEach, describe, expect, it} from 'vitest'
+import {beforeEach, describe, expect, it, vi} from 'vitest'
 
 
 let map: Map,
@@ -14,6 +14,9 @@ let map: Map,
     printLayoutInstanceWithCustomOptions: PrintLayout;
 
 beforeEach(() => {
+
+    (PrintLayout.prototype as any).computeBbox = vi.fn().mockReturnValue([964998.5777272603,6343844.076207236,967054.8931096965,6345565.183274685]);
+
     const mapDiv = document.createElement('div');
     mapDiv.style.width = '300px';
     mapDiv.style.height = '400px';

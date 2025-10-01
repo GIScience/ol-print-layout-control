@@ -6,9 +6,10 @@ export default defineConfig(({command, mode, ssrBuild}) => {
     console.log(command, mode);
     let baseConfig = {
         test: {
-            environment: 'jsdom', // or 'jsdom', 'happy-dom', 'node',
+            environment: 'happy-dom', // or 'jsdom', 'happy-dom', 'node',
             dir: 'test',
             coverage:{
+                provider: 'istanbul', // or 'v8'
                 reportsDirectory: '../coverage'
             }
         },
@@ -16,11 +17,12 @@ export default defineConfig(({command, mode, ssrBuild}) => {
         build: {
             outDir: '../dist',
             emptyOutDir: true,
-            target: 'modules', //modules: support dynamic imports defined in ES2020
+            target: 'baseline-widely-available', //modules: support dynamic imports defined in ES2020 //vite v7 'baseline-widely-available'
             lib: {
                 entry: resolve(__dirname, 'src/ol-print-layout-control.ts'),
                 name: 'ol-print-layout-control', // fileName: 'PrintLayout',
                 fileName: () => 'ol-print-layout-control.js',
+                cssFileName: 'ol-print-layout-control',
                 formats: ['umd']
             },
             sourcemap: true,
@@ -32,10 +34,6 @@ export default defineConfig(({command, mode, ssrBuild}) => {
                         "ol/sphere": 'ol.sphere',
                         "ol/proj": 'ol.proj',
                         "ol/control/Control": 'ol.control.Control',
-                    }, assetFileNames: (chunkInfo) => {
-                        if (chunkInfo.name === 'style.css') {
-                            return 'ol-print-layout-control.css';
-                        }
                     },
                 }
             }
